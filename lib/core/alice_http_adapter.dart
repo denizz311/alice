@@ -26,9 +26,6 @@ class AliceHttpAdapter {
     var request = response.request;
 
     AliceHttpCall call = AliceHttpCall(response.request.hashCode);
-    debugPrint('========ALICE=========');
-    debugPrint(response.toString());
-    debugPrint('========ALICE=========');
     call.loading = true;
     call.client = "HttpClient (http package)";
     call.uri = request.url.toString();
@@ -43,7 +40,7 @@ class AliceHttpAdapter {
     if (request.url.scheme == "https") {
       call.secure = true;
     }
-    call.traceId = response.headers['traceId'];
+    call.traceId = response.headers['x-trace-id'];
 
     AliceHttpRequest httpRequest = AliceHttpRequest();
 
