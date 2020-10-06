@@ -4,6 +4,7 @@ import 'package:alice/core/alice_core.dart';
 import 'package:alice/model/alice_http_call.dart';
 import 'package:alice/model/alice_http_request.dart';
 import 'package:alice/model/alice_http_response.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class AliceHttpAdapter {
@@ -25,6 +26,9 @@ class AliceHttpAdapter {
     var request = response.request;
 
     AliceHttpCall call = AliceHttpCall(response.request.hashCode);
+    debugPrint('========ALICE=========');
+    debugPrint(response.toString());
+    debugPrint('========ALICE=========');
     call.loading = true;
     call.client = "HttpClient (http package)";
     call.uri = request.url.toString();
@@ -39,6 +43,7 @@ class AliceHttpAdapter {
     if (request.url.scheme == "https") {
       call.secure = true;
     }
+    call.traceId = response.headers['traceId'];
 
     AliceHttpRequest httpRequest = AliceHttpRequest();
 

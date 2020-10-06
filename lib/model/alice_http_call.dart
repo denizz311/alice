@@ -11,6 +11,7 @@ class AliceHttpCall {
   String endpoint = "";
   String server = "";
   String uri = "";
+  String traceId = "";
   int duration = 0;
 
   AliceHttpRequest request;
