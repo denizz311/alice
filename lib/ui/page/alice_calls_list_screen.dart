@@ -1,8 +1,8 @@
-import 'package:alice/model/alice_menu_item.dart';
-import 'package:alice/helper/alice_alert_helper.dart';
-import 'package:alice/ui/page/alice_call_details_screen.dart';
 import 'package:alice/core/alice_core.dart';
+import 'package:alice/helper/alice_alert_helper.dart';
 import 'package:alice/model/alice_http_call.dart';
+import 'package:alice/model/alice_menu_item.dart';
+import 'package:alice/ui/page/alice_call_details_screen.dart';
 import 'package:alice/ui/utils/alice_constants.dart';
 import 'package:alice/ui/widget/alice_call_list_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,9 @@ import 'alice_stats_screen.dart';
 
 class AliceCallsListScreen extends StatefulWidget {
   final AliceCore _aliceCore;
+  final bool reverse;
 
-  AliceCallsListScreen(this._aliceCore);
+  AliceCallsListScreen(this._aliceCore) : reverse = true;
 
   @override
   _AliceCallsListScreenState createState() => _AliceCallsListScreenState();
@@ -185,6 +186,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
 
   Widget _buildCallsListWidget(List<AliceHttpCall> calls) {
     return ListView.builder(
+      reverse: widget.reverse,
       itemCount: calls.length,
       itemBuilder: (context, index) {
         return AliceCallListItemWidget(calls[index], _onListItemClicked);
