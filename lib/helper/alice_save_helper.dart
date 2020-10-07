@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:alice/helper/alice_conversion_helper.dart';
 import 'package:alice/model/alice_http_call.dart';
 import 'package:alice/ui/utils/alice_parser.dart';
 import 'package:flutter/material.dart';
@@ -153,13 +152,13 @@ class AliceSaveHelper {
         stringBuffer.write("Error stacktrace: ${call.error.stackTrace}\n");
       }
     }
-    stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("Curl\n");
-    stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("${call.getCurlCommand()}");
-    stringBuffer.write("\n");
-    stringBuffer.write("==============================================\n");
-    stringBuffer.write("\n");
+    // stringBuffer.write("--------------------------------------------\n");
+    // stringBuffer.write("Curl\n");
+    // stringBuffer.write("--------------------------------------------\n");
+    // stringBuffer.write("${call.getCurlCommand()}");
+    // stringBuffer.write("\n");
+    // stringBuffer.write("==============================================\n");
+    // stringBuffer.write("\n");
 
     return stringBuffer.toString();
   }
