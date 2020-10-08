@@ -68,16 +68,18 @@ class AliceSaveHelper {
       IOSink sink = file.openWrite(mode: FileMode.append);
       final Map<String, dynamic> map = {
         'general_info': null,
-        'log': [],
-        'reversed_log': [],
+        'log': {},
+        'reversed_log': {},
       };
       final aliceLog = await _buildAliceLog();
       map['general_info'] = aliceLog;
       calls.forEach((AliceHttpCall call) {
-        map['log'].add(_buildCallLog(call));
+        map['log']['${call.response.status} ${call.endpoint}'] =
+            _buildCallLog(call);
       });
       calls.reversed.forEach((AliceHttpCall call) {
-        map['reversed_log'].add(_buildCallLog(call));
+        map['reversed_log']['${call.response.status} ${call.endpoint}'] =
+            _buildCallLog(call);
       });
       // sink.write(await _buildAliceLog());
       // calls.forEach((AliceHttpCall call) {
@@ -126,18 +128,15 @@ class AliceSaveHelper {
     assert(call != null, "call can't be null");
     StringBuffer stringBuffer = StringBuffer();
     Map<String, dynamic> map = {
-      'general_data': null,
+      'traceId': '${call.traceId}',
+      'url': '${call.method} https://${call.server}${call.endpoint}',
+      'responseCode': '${call.response.status}',
       'request': null,
       'response': null,
     };
     // stringBuffer.write("===========================================\n");
     // stringBuffer.write("Id: ${call.id}\n");
     // stringBuffer.write("============================================\n");
-    map['general_data'] = {
-      'traceId': '${call.traceId}',
-      'url': '${call.method} https://${call.server}${call.endpoint}',
-      'responseCode': '${call.response.status}',
-    };
 
     // stringBuffer.write("===========================================\n");
     // stringBuffer.write("General data\n");
