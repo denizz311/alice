@@ -68,7 +68,7 @@ class AliceSaveHelper {
       IOSink sink = file.openWrite(mode: FileMode.append);
       final aliceLog = await _buildAliceLog();
       final Map<String, dynamic> map = {
-        'general_info': json.encode(aliceLog),
+        'general_info': aliceLog,
         'log': [],
       };
       calls.forEach((AliceHttpCall call) {
@@ -78,7 +78,7 @@ class AliceSaveHelper {
       // calls.forEach((AliceHttpCall call) {
       //   sink.write(_buildCallLog(call));
       // });
-      sink.write(map);
+      sink.write(JsonEncoder().convert(map));
       await sink.flush();
       await sink.close();
       AliceAlertHelper.showAlert(
@@ -212,7 +212,7 @@ class AliceSaveHelper {
     try {
       final aliceLog = await _buildAliceLog();
       final callLog = _buildCallLog(call);
-      return json.encode({
+      return JsonEncoder().convert({
         'general_info': aliceLog,
         'log': callLog,
       });
