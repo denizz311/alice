@@ -104,13 +104,13 @@ class AliceSaveHelper {
     // stringBuffer.write("Alice - HTTP Inspector\n");
     map['title'] = "Alice - HTTP Inspector";
     // stringBuffer.write("App name:  ${packageInfo.appName}\n");
-    map['app_name'] = packageInfo.appName;
+    map['app_name'] = packageInfo.appName.toString();
     // stringBuffer.write("Package: ${packageInfo.packageName}\n");
-    map['package_name'] = packageInfo.packageName;
+    map['package_name'] = packageInfo.packageName.toString();
     // stringBuffer.write("Version: ${packageInfo.version}\n");
-    map['version'] = packageInfo.version;
+    map['version'] = packageInfo.version.toString();
     // stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
-    map['build_number'] = packageInfo.buildNumber;
+    map['build_number'] = packageInfo.buildNumber.toString();
     // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
     map['createdAt'] = DateTime.now().toIso8601String();
     // stringBuffer.write("\n");
