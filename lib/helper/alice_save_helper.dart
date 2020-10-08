@@ -149,10 +149,10 @@ class AliceSaveHelper {
     ////     .write("Duration ${AliceConversionHelper.formatTime(call.duration)}\n");
     //// stringBuffer.write("Secured connection: ${call.secure}\n");
     //// stringBuffer.write("Completed: ${!call.loading} \n");
-    map['request'] =
-        '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}';
-    map['response'] =
-        '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}';
+    map['request'] = JsonDecoder().convert(
+        '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}');
+    map['response'] = JsonDecoder().convert(
+        '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}');
 
     // stringBuffer.write("--------------------------------------------\n");
     // stringBuffer.write("Request Body\n");
