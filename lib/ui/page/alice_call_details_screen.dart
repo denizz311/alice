@@ -92,7 +92,7 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
 
   Future<String> _getSharableResponseString() async {
     return JsonEncoder()
-        .convert(await AliceSaveHelper.buildCallLog(widget.call));
+        .convert(AliceSaveHelper.buildCallLog(widget.call));
   }
 
   List<Widget> _getTabBars() {
