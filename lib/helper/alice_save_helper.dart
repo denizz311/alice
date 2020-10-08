@@ -69,11 +69,15 @@ class AliceSaveHelper {
       final Map<String, dynamic> map = {
         'general_info': null,
         'log': [],
+        'reversed_log': [],
       };
       final aliceLog = await _buildAliceLog();
       map['general_info'] = aliceLog;
       calls.forEach((AliceHttpCall call) {
         map['log'].add(_buildCallLog(call));
+      });
+      calls.reversed.forEach((AliceHttpCall call) {
+        map['reversed_log'].add(_buildCallLog(call));
       });
       // sink.write(await _buildAliceLog());
       // calls.forEach((AliceHttpCall call) {
@@ -125,7 +129,6 @@ class AliceSaveHelper {
       'general_data': null,
       'request': null,
       'response': null,
-      'error': null,
     };
     // stringBuffer.write("===========================================\n");
     // stringBuffer.write("Id: ${call.id}\n");
