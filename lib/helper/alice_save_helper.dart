@@ -149,10 +149,21 @@ class AliceSaveHelper {
     ////     .write("Duration ${AliceConversionHelper.formatTime(call.duration)}\n");
     //// stringBuffer.write("Secured connection: ${call.secure}\n");
     //// stringBuffer.write("Completed: ${!call.loading} \n");
-    map['request'] = JsonDecoder().convert(
-        '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}');
-    map['response'] = JsonDecoder().convert(
-        '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}');
+    try {
+      map['request'] = JsonDecoder().convert(
+          '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}');
+    } catch (e) {
+      map['request'] =
+          '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}';
+    }
+
+    try {
+      map['response'] = JsonDecoder().convert(
+          '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}');
+    } catch (e) {
+      map['response'] =
+          '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}';
+    }
 
     // stringBuffer.write("--------------------------------------------\n");
     // stringBuffer.write("Request Body\n");
