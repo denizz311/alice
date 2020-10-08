@@ -97,7 +97,7 @@ class AliceSaveHelper {
     return "";
   }
 
-  static Future<String> _buildAliceLog() async {
+  static Future<Map<String, dynamic>> _buildAliceLog() async {
     // StringBuffer stringBuffer = StringBuffer();
     var packageInfo = await PackageInfo.fromPlatform();
     var map = {};
@@ -114,7 +114,7 @@ class AliceSaveHelper {
     // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
     map['createdAt'] = "${DateTime.now().toIso8601String()}".toString();
     // stringBuffer.write("\n");
-    return map.toString();
+    return map;
   }
 
   static Map<String, dynamic> _buildCallLog(AliceHttpCall call) {
