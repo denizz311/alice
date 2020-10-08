@@ -101,7 +101,7 @@ class AliceSaveHelper {
   static Future<Map<String, dynamic>> _buildAliceLog() async {
     // StringBuffer stringBuffer = StringBuffer();
     var packageInfo = await PackageInfo.fromPlatform();
-    var map = {};
+    Map<String, dynamic> map = {};
     // stringBuffer.write("Alice - HTTP Inspector\n");
     map['title'] = "Alice - HTTP Inspector";
     // stringBuffer.write("App name:  ${packageInfo.appName}\n");
