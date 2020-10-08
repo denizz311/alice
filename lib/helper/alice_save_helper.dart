@@ -66,10 +66,19 @@ class AliceSaveHelper {
       File file = File(externalDir.path.toString() + "/" + fileName);
       file.createSync();
       IOSink sink = file.openWrite(mode: FileMode.append);
-      sink.write(await _buildAliceLog());
+      final aliceLog = await _buildAliceLog();
+      final Map<String, dynamic> map = {
+        'general_info': aliceLog,
+        'log': [],
+      };
       calls.forEach((AliceHttpCall call) {
-        sink.write(_buildCallLog(call));
+        map['log'].add(_buildCallLog(call));
       });
+      // sink.write(await _buildAliceLog());
+      // calls.forEach((AliceHttpCall call) {
+      //   sink.write(_buildCallLog(call));
+      // });
+      sink.write(map);
       await sink.flush();
       await sink.close();
       AliceAlertHelper.showAlert(
@@ -203,10 +212,10 @@ class AliceSaveHelper {
     try {
       final aliceLog = await _buildAliceLog();
       final callLog = _buildCallLog(call);
-      return {
+      return json.encode({
         'general_info': aliceLog,
-        'log': [callLog]
-      }.toString();
+        'log': callLog,
+      });
     } catch (exception) {
       return "Failed to generate call log";
     }
