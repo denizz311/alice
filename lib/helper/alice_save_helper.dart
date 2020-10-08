@@ -95,15 +95,15 @@ class AliceSaveHelper {
     // stringBuffer.write("Alice - HTTP Inspector\n");
     map['title'] = "Alice - HTTP Inspector";
     // stringBuffer.write("App name:  ${packageInfo.appName}\n");
-    map['app_name'] = "${packageInfo.appName}";
+    map['app_name'] = "${packageInfo.appName}".toString();
     // stringBuffer.write("Package: ${packageInfo.packageName}\n");
-    map['app_name'] = "${packageInfo.appName}";
+    map['package_name'] = "${packageInfo.packageName}".toString();
     // stringBuffer.write("Version: ${packageInfo.version}\n");
-    map['version'] = "${packageInfo.version}";
+    map['version'] = "${packageInfo.version}".toString();
     // stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
-    map['build_number'] = "${packageInfo.buildNumber}";
+    map['build_number'] = "${packageInfo.buildNumber}".toString();
     // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
-    map['createdAt'] = "${DateTime.now().toIso8601String()}";
+    map['createdAt'] = "${DateTime.now().toIso8601String()}".toString();
     // stringBuffer.write("\n");
     return map.toString();
   }
@@ -121,9 +121,9 @@ class AliceSaveHelper {
     // stringBuffer.write("Id: ${call.id}\n");
     // stringBuffer.write("============================================\n");
     map['general_data'] = {
-      'traceId': '${call.traceId}',
-      'url': '${call.method} https://${call.server}${call.endpoint}',
-      'responseCode': '${call.response.status}',
+      'traceId': '${call.traceId}'.toString(),
+      'url': '${call.method} https://${call.server}${call.endpoint}'.toString(),
+      'responseCode': '${call.response.status}'.toString(),
     };
 
     // stringBuffer.write("===========================================\n");
@@ -195,7 +195,7 @@ class AliceSaveHelper {
     // stringBuffer.write("\n");
 
     // return stringBuffer.toString();
-    return map.toString();
+    return '${map.toString()},';
   }
 
   static Future<String> buildCallLog(AliceHttpCall call) async {
