@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alice/core/alice_core.dart';
 import 'package:alice/helper/alice_save_helper.dart';
 import 'package:alice/model/alice_http_call.dart';
@@ -89,7 +91,8 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
   }
 
   Future<String> _getSharableResponseString() async {
-    return AliceSaveHelper.buildCallLog(widget.call);
+    return JsonEncoder()
+        .convert(await AliceSaveHelper.buildCallLog(widget.call));
   }
 
   List<Widget> _getTabBars() {

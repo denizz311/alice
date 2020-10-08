@@ -117,7 +117,7 @@ class AliceSaveHelper {
     return map.toString();
   }
 
-  static String _buildCallLog(AliceHttpCall call) {
+  static Map<String, dynamic> _buildCallLog(AliceHttpCall call) {
     assert(call != null, "call can't be null");
     StringBuffer stringBuffer = StringBuffer();
     Map<String, dynamic> map = {
@@ -204,20 +204,20 @@ class AliceSaveHelper {
     // stringBuffer.write("\n");
 
     // return stringBuffer.toString();
-    return json.encode(map);
+    return map;
   }
 
-  static Future<String> buildCallLog(AliceHttpCall call) async {
+  static Future<Map<String, dynamic>> buildCallLog(AliceHttpCall call) async {
     assert(call != null, "call can't be null");
     try {
       final aliceLog = await _buildAliceLog();
       final callLog = _buildCallLog(call);
-      return JsonEncoder().convert({
+      return {
         'general_info': aliceLog,
         'log': callLog,
-      });
+      };
     } catch (exception) {
-      return "Failed to generate call log";
+      return {'error': "Failed to generate call log"};
     }
   }
 }
