@@ -89,39 +89,63 @@ class AliceSaveHelper {
   }
 
   static Future<String> _buildAliceLog() async {
-    StringBuffer stringBuffer = StringBuffer();
+    // StringBuffer stringBuffer = StringBuffer();
     var packageInfo = await PackageInfo.fromPlatform();
-    stringBuffer.write("Alice - HTTP Inspector\n");
-    stringBuffer.write("App name:  ${packageInfo.appName}\n");
-    stringBuffer.write("Package: ${packageInfo.packageName}\n");
-    stringBuffer.write("Version: ${packageInfo.version}\n");
-    stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
-    stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
-    stringBuffer.write("\n");
-    return stringBuffer.toString();
+    var map = {};
+    // stringBuffer.write("Alice - HTTP Inspector\n");
+    map['title'] = "Alice - HTTP Inspector";
+    // stringBuffer.write("App name:  ${packageInfo.appName}\n");
+    map['app_name'] = "${packageInfo.appName}";
+    // stringBuffer.write("Package: ${packageInfo.packageName}\n");
+    map['app_name'] = "${packageInfo.appName}";
+    // stringBuffer.write("Version: ${packageInfo.version}\n");
+    map['version'] = "${packageInfo.version}";
+    // stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
+    map['build_number'] = "${packageInfo.buildNumber}";
+    // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
+    map['createdAt'] = "${DateTime.now().toIso8601String()}";
+    // stringBuffer.write("\n");
+    return map.toString();
   }
 
   static String _buildCallLog(AliceHttpCall call) {
     assert(call != null, "call can't be null");
     StringBuffer stringBuffer = StringBuffer();
+    Map<String, dynamic> map = {
+      'general_data': null,
+      'request': null,
+      'response': null,
+      'error': null,
+    };
     // stringBuffer.write("===========================================\n");
     // stringBuffer.write("Id: ${call.id}\n");
     // stringBuffer.write("============================================\n");
-    stringBuffer.write("===========================================\n");
-    stringBuffer.write("General data\n");
-    stringBuffer.write("===========================================\n");
-    stringBuffer.write("TraceId: ${call.traceId} \n");
-    stringBuffer
-        .write("Url: ${call.method} https://${call.server}${call.endpoint}\n");
-    stringBuffer.write("ResponseCode: ${call.response.status} \n");
-    // stringBuffer.write("Client: ${call.client} \n");
+    map['general_data'] = {
+      'traceId': '${call.traceId}',
+      'url': '${call.method} https://${call.server}${call.endpoint}',
+      'responseCode': '${call.response.status}',
+    };
+
+    // stringBuffer.write("===========================================\n");
+    // stringBuffer.write("General data\n");
+    // stringBuffer.write("===========================================\n");
+    // stringBuffer.write("TraceId: ${call.traceId} \n");
     // stringBuffer
-    //     .write("Duration ${AliceConversionHelper.formatTime(call.duration)}\n");
-    // stringBuffer.write("Secured connection: ${call.secure}\n");
-    // stringBuffer.write("Completed: ${!call.loading} \n");
-    stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("Request Body\n");
-    stringBuffer.write("--------------------------------------------\n");
+    //     .write("Url: ${call.method} https://${call.server}${call.endpoint}\n");
+    // stringBuffer.write("ResponseCode: ${call.response.status} \n");
+
+    //// stringBuffer.write("Client: ${call.client} \n");
+    //// stringBuffer
+    ////     .write("Duration ${AliceConversionHelper.formatTime(call.duration)}\n");
+    //// stringBuffer.write("Secured connection: ${call.secure}\n");
+    //// stringBuffer.write("Completed: ${!call.loading} \n");
+    map['request'] = '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}';
+    map['response'] = '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}';
+
+    // stringBuffer.write("--------------------------------------------\n");
+    // stringBuffer.write("Request Body\n");
+    // stringBuffer.write("--------------------------------------------\n");
+
     // stringBuffer.write("Request time: ${call.request.time}\n");
     // stringBuffer.write("Request content type: ${call.request.contentType}\n");
     // stringBuffer
@@ -130,27 +154,35 @@ class AliceSaveHelper {
     //     .write("Request headers: ${_encoder.convert(call.request.headers)}\n");
     // stringBuffer.write(
     //     "Request size: ${AliceConversionHelper.formatBytes(call.request.size)}\n");
-    stringBuffer.write(
-        "${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}\n");
-    stringBuffer.write("--------------------------------------------\n");
-    stringBuffer.write("Response Body\n");
-    stringBuffer.write("--------------------------------------------\n");
+
+    // stringBuffer.write(
+    //     "${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}\n");
+    // stringBuffer.write("--------------------------------------------\n");
+    // stringBuffer.write("Response Body\n");
+    // stringBuffer.write("--------------------------------------------\n");
+
     // stringBuffer.write("Response time: ${call.response.time}\n");
     // stringBuffer.write("Response status: ${call.response.status}\n");
     // stringBuffer.write(
     //     "Response size: ${AliceConversionHelper.formatBytes(call.response.size)}\n");
     // stringBuffer.write(
     //     "Response headers: ${_encoder.convert(call.response.headers)}\n");
-    stringBuffer.write(
-        "${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}\n");
+
+    // stringBuffer.write(
+    //     "${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}\n");
+
     if (call.error != null) {
-      stringBuffer.write("--------------------------------------------\n");
-      stringBuffer.write("Error\n");
-      stringBuffer.write("--------------------------------------------\n");
-      stringBuffer.write("Error: ${call.error.error}\n");
-      if (call.error.stackTrace != null) {
-        stringBuffer.write("Error stacktrace: ${call.error.stackTrace}\n");
-      }
+      map['error'] = {
+        'error': '${call.error.error}',
+        'stackTrace': '${call.error.stackTrace}',
+      };
+      // stringBuffer.write("--------------------------------------------\n");
+      // stringBuffer.write("Error\n");
+      // stringBuffer.write("--------------------------------------------\n");
+      // stringBuffer.write("Error: ${call.error.error}\n");
+      // if (call.error.stackTrace != null) {
+      //   stringBuffer.write("Error stacktrace: ${call.error.stackTrace}\n");
+      // }
     }
     // stringBuffer.write("--------------------------------------------\n");
     // stringBuffer.write("Curl\n");
@@ -160,7 +192,8 @@ class AliceSaveHelper {
     // stringBuffer.write("==============================================\n");
     // stringBuffer.write("\n");
 
-    return stringBuffer.toString();
+    // return stringBuffer.toString();
+    return map.toString();
   }
 
   static Future<String> buildCallLog(AliceHttpCall call) async {
