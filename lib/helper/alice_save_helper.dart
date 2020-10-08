@@ -66,11 +66,12 @@ class AliceSaveHelper {
       File file = File(externalDir.path.toString() + "/" + fileName);
       file.createSync();
       IOSink sink = file.openWrite(mode: FileMode.append);
-      final aliceLog = await _buildAliceLog();
       final Map<String, dynamic> map = {
-        'general_info': aliceLog,
+        'general_info': null,
         'log': [],
       };
+      final aliceLog = await _buildAliceLog();
+      map['general_info'] = aliceLog;
       calls.forEach((AliceHttpCall call) {
         map['log'].add(_buildCallLog(call));
       });
@@ -104,13 +105,13 @@ class AliceSaveHelper {
     // stringBuffer.write("Alice - HTTP Inspector\n");
     map['title'] = "Alice - HTTP Inspector";
     // stringBuffer.write("App name:  ${packageInfo.appName}\n");
-    map['app_name'] = packageInfo.appName.toString();
+    map['app_name'] = packageInfo.appName;
     // stringBuffer.write("Package: ${packageInfo.packageName}\n");
-    map['package_name'] = packageInfo.packageName.toString();
+    map['package_name'] = packageInfo.packageName;
     // stringBuffer.write("Version: ${packageInfo.version}\n");
-    map['version'] = packageInfo.version.toString();
+    map['version'] = packageInfo.version;
     // stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
-    map['build_number'] = packageInfo.buildNumber.toString();
+    map['build_number'] = packageInfo.buildNumber;
     // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
     map['createdAt'] = DateTime.now().toIso8601String();
     // stringBuffer.write("\n");
@@ -130,9 +131,9 @@ class AliceSaveHelper {
     // stringBuffer.write("Id: ${call.id}\n");
     // stringBuffer.write("============================================\n");
     map['general_data'] = {
-      'traceId': '${call.traceId}'.toString(),
-      'url': '${call.method} https://${call.server}${call.endpoint}'.toString(),
-      'responseCode': '${call.response.status}'.toString(),
+      'traceId': '${call.traceId}',
+      'url': '${call.method} https://${call.server}${call.endpoint}',
+      'responseCode': '${call.response.status}',
     };
 
     // stringBuffer.write("===========================================\n");
