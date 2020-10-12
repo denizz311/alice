@@ -8,6 +8,7 @@ import 'package:open_file/open_file.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
 
 import '../helper/alice_alert_helper.dart';
 
@@ -61,38 +62,48 @@ class AliceSaveHelper {
       Directory externalDir = await (isAndroid
           ? getExternalStorageDirectory()
           : getApplicationDocumentsDirectory());
+
       String fileName =
           "alice_log_${DateTime.now().millisecondsSinceEpoch}.json";
+
       File file = File(externalDir.path.toString() + "/" + fileName);
       file.createSync();
+
       IOSink sink = file.openWrite(mode: FileMode.append);
+
       final Map<String, dynamic> map = {
         'general_info': null,
         'log': {},
         'reversed_log': {},
       };
+
       final aliceLog = await _buildAliceLog();
+
       map['general_info'] = aliceLog;
+
       calls.forEach((AliceHttpCall call) {
         map['log']['${call.response.status} ${call.endpoint}'] =
             _buildCallLog(call);
       });
+
       calls.reversed.forEach((AliceHttpCall call) {
         map['reversed_log']['${call.response.status} ${call.endpoint}'] =
             _buildCallLog(call);
       });
-      // sink.write(await _buildAliceLog());
-      // calls.forEach((AliceHttpCall call) {
-      //   sink.write(_buildCallLog(call));
-      // });
+
       sink.write(JsonEncoder().convert(map));
+
       await sink.flush();
       await sink.close();
+
       AliceAlertHelper.showAlert(
           context, "Success", "Sucessfully saved logs in ${file.path}",
           secondButtonTitle: isAndroid ? "View file" : null,
           secondButtonAction: () => isAndroid ? OpenFile.open(file.path) : null,
           brightness: brightness);
+
+      Share.share(JsonEncoder().convert(map), subject: 'Request List');
+
       return file.path;
     } catch (exception) {
       AliceAlertHelper.showAlert(
@@ -105,28 +116,19 @@ class AliceSaveHelper {
   }
 
   static Future<Map<String, dynamic>> _buildAliceLog() async {
-    // StringBuffer stringBuffer = StringBuffer();
     var packageInfo = await PackageInfo.fromPlatform();
     Map<String, dynamic> map = {};
-    // stringBuffer.write("Alice - HTTP Inspector\n");
     map['title'] = "Alice - HTTP Inspector";
-    // stringBuffer.write("App name:  ${packageInfo.appName}\n");
     map['app_name'] = packageInfo.appName;
-    // stringBuffer.write("Package: ${packageInfo.packageName}\n");
     map['package_name'] = packageInfo.packageName;
-    // stringBuffer.write("Version: ${packageInfo.version}\n");
     map['version'] = packageInfo.version;
-    // stringBuffer.write("Build number: ${packageInfo.buildNumber}\n");
     map['build_number'] = packageInfo.buildNumber;
-    // stringBuffer.write("Generated: " + DateTime.now().toIso8601String() + "\n");
     map['createdAt'] = DateTime.now().toIso8601String();
-    // stringBuffer.write("\n");
     return map;
   }
 
   static Map<String, dynamic> _buildCallLog(AliceHttpCall call) {
     assert(call != null, "call can't be null");
-    StringBuffer stringBuffer = StringBuffer();
     Map<String, dynamic> map = {
       'traceId': '${call.traceId}',
       'url': '${call.method} https://${call.server}${call.endpoint}',
@@ -134,23 +136,7 @@ class AliceSaveHelper {
       'request': null,
       'response': null,
     };
-    // stringBuffer.write("===========================================\n");
-    // stringBuffer.write("Id: ${call.id}\n");
-    // stringBuffer.write("============================================\n");
 
-    // stringBuffer.write("===========================================\n");
-    // stringBuffer.write("General data\n");
-    // stringBuffer.write("===========================================\n");
-    // stringBuffer.write("TraceId: ${call.traceId} \n");
-    // stringBuffer
-    //     .write("Url: ${call.method} https://${call.server}${call.endpoint}\n");
-    // stringBuffer.write("ResponseCode: ${call.response.status} \n");
-
-    //// stringBuffer.write("Client: ${call.client} \n");
-    //// stringBuffer
-    ////     .write("Duration ${AliceConversionHelper.formatTime(call.duration)}\n");
-    //// stringBuffer.write("Secured connection: ${call.secure}\n");
-    //// stringBuffer.write("Completed: ${!call.loading} \n");
     try {
       map['request'] = JsonDecoder().convert(
           '${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}');
@@ -167,57 +153,13 @@ class AliceSaveHelper {
           '${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}';
     }
 
-    // stringBuffer.write("--------------------------------------------\n");
-    // stringBuffer.write("Request Body\n");
-    // stringBuffer.write("--------------------------------------------\n");
-
-    // stringBuffer.write("Request time: ${call.request.time}\n");
-    // stringBuffer.write("Request content type: ${call.request.contentType}\n");
-    // stringBuffer
-    //     .write("Request cookies: ${_encoder.convert(call.request.cookies)}\n");
-    // stringBuffer
-    //     .write("Request headers: ${_encoder.convert(call.request.headers)}\n");
-    // stringBuffer.write(
-    //     "Request size: ${AliceConversionHelper.formatBytes(call.request.size)}\n");
-
-    // stringBuffer.write(
-    //     "${AliceParser.formatBody(call.request.body, AliceParser.getContentType(call.request.headers))}\n");
-    // stringBuffer.write("--------------------------------------------\n");
-    // stringBuffer.write("Response Body\n");
-    // stringBuffer.write("--------------------------------------------\n");
-
-    // stringBuffer.write("Response time: ${call.response.time}\n");
-    // stringBuffer.write("Response status: ${call.response.status}\n");
-    // stringBuffer.write(
-    //     "Response size: ${AliceConversionHelper.formatBytes(call.response.size)}\n");
-    // stringBuffer.write(
-    //     "Response headers: ${_encoder.convert(call.response.headers)}\n");
-
-    // stringBuffer.write(
-    //     "${AliceParser.formatBody(call.response.body, AliceParser.getContentType(call.response.headers))}\n");
-
     if (call.error != null) {
       map['error'] = {
         'error': '${call.error.error}',
         'stackTrace': '${call.error.stackTrace}',
       };
-      // stringBuffer.write("--------------------------------------------\n");
-      // stringBuffer.write("Error\n");
-      // stringBuffer.write("--------------------------------------------\n");
-      // stringBuffer.write("Error: ${call.error.error}\n");
-      // if (call.error.stackTrace != null) {
-      //   stringBuffer.write("Error stacktrace: ${call.error.stackTrace}\n");
-      // }
     }
-    // stringBuffer.write("--------------------------------------------\n");
-    // stringBuffer.write("Curl\n");
-    // stringBuffer.write("--------------------------------------------\n");
-    // stringBuffer.write("${call.getCurlCommand()}");
-    // stringBuffer.write("\n");
-    // stringBuffer.write("==============================================\n");
-    // stringBuffer.write("\n");
 
-    // return stringBuffer.toString();
     return map;
   }
 

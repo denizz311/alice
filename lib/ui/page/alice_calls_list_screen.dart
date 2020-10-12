@@ -13,7 +13,7 @@ class AliceCallsListScreen extends StatefulWidget {
   final AliceCore _aliceCore;
   final bool reverse;
 
-  AliceCallsListScreen(this._aliceCore) : reverse = true;
+  AliceCallsListScreen(this._aliceCore) : reverse = false;
 
   @override
   _AliceCallsListScreenState createState() => _AliceCallsListScreenState();
@@ -139,7 +139,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
               .toList();
         }
         if (calls.isNotEmpty) {
-          return _buildCallsListWidget(calls);
+          return _buildCallsListWidget(calls.reversed);
         } else {
           return _buildEmptyWidget();
         }
