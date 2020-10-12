@@ -11,9 +11,8 @@ import 'alice_stats_screen.dart';
 
 class AliceCallsListScreen extends StatefulWidget {
   final AliceCore _aliceCore;
-  final bool reverse;
 
-  AliceCallsListScreen(this._aliceCore) : reverse = false;
+  AliceCallsListScreen(this._aliceCore);
 
   @override
   _AliceCallsListScreenState createState() => _AliceCallsListScreenState();
@@ -139,7 +138,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
               .toList();
         }
         if (calls.isNotEmpty) {
-          return _buildCallsListWidget(calls.reversed);
+          return _buildCallsListWidget(calls);
         } else {
           return _buildEmptyWidget();
         }
@@ -185,11 +184,11 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
   }
 
   Widget _buildCallsListWidget(List<AliceHttpCall> calls) {
+    final _calls = calls.reversed.toList();
     return ListView.builder(
-      reverse: widget.reverse,
-      itemCount: calls.length,
+      itemCount: _calls.length,
       itemBuilder: (context, index) {
-        return AliceCallListItemWidget(calls[index], _onListItemClicked);
+        return AliceCallListItemWidget(_calls[index], _onListItemClicked);
       },
     );
   }
